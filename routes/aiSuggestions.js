@@ -1,33 +1,28 @@
 require('dotenv').config();
 const express = require('express');
+const { HfInference } = require('@huggingface/inference');
 const route = express.Router();
-const OpenAIApi = require('openai');
-const Configuration = require('openai');
 
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
+const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
 route.post('/', async (req, res) => {
-    const { itemName } = req.body;
-    if (!itemName) {
-        return res.status(400).json({ error: 'Item name is required.' });
-    }
     try {
-        const prompt = `Provide suggestions related to the item: ${itemName}.`;
+        const { title, description, tags } = req.body;
 
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [{ role: 'user', content: prompt }],
-            max_tokens: 50,
+        const inputText = `Based on the following details, generate optimized suggestions:
+        Title: ${title}
+        Description: ${description}
+        Tags: ${tags.join(', ')}`;
+
+        const result = await hf.textGeneration({
+            model: 'EleutherAI/gpt-neo-2.7B',
+            inputs: inputText,
         });
-        const suggestions = response.data.choices[0].message.content.trim();
-        res.json({ suggestions });
+
+        res.json({ message: 'sussfull api call', result });
     } catch (error) {
-        console.error('Error fetching suggestions:', error);
-        res.status(500).json({ error: 'Failed to fetch suggestions.' });
+        console.log(error);
+        res.status(500).json({ error: 'Failed to fetch suggestions.', error });
     }
 });
 
