@@ -1,18 +1,11 @@
 version: 1
-applications:
-  - backend:
-      phases:
-        preBuild:
-          commands:
-            - npm install
-        build:
-          commands:
-            - npm install -g nodemon
-            - nodemon index.js
-      artifacts:
-        baseDirectory: /
-        files:
-          - '**/*'
-      cache:
-        paths:
-          - node_modules/**/*
+backend:
+  phases:
+    build:
+      commands:
+        - echo "Starting backend build..."
+        - npm install
+    deploy:
+      commands:
+        - echo "Deploying backend..."
+        - nodemon index.js       # Or the command to start your backend server
