@@ -1,0 +1,18 @@
+version: 1.0
+backend:
+  phases:
+    preBuild:
+      commands:
+        - npm install  # Install necessary dependencies for the backend (including nodemon if needed for local dev)
+    build:
+      commands:
+        - npm run build  # Not typically needed for backend Lambda, so you can remove or leave as is if required for other builds
+
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm install  # Install dependencies for the frontend (if applicable)
+    build:
+      commands:
+        - npm run build  # This is useful for a frontend framework like React or Vue.js; otherwise, you can leave it empty or remove

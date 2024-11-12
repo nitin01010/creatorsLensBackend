@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "deploy": "amplify push"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
     "express": "^4.21.1",
     "mongoose": "^8.8.0",
     "nodemon": "^3.1.7",
-    "openai": "^4.71.1"
+    "openai": "^4.71.1",
+    "serverless-http": "^3.2.0"
   }
 }
