@@ -1,13 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const { HfInference } = require('@huggingface/inference');
-const route = express.Router();
+const router = express.Router();
 
 const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
-route.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const { title, description, tags } = req.body;
+        const { title, description, tags = [] } = req.body;  // Default tags to an empty array if undefined
 
         const inputText = `Based on the following details, generate optimized suggestions:
         Title: ${title}
@@ -19,11 +19,11 @@ route.post('/', async (req, res) => {
             inputs: inputText,
         });
 
-        res.json({ message: 'sussfull api call', result });
+        res.json({ message: 'Successful API call', result });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Failed to fetch suggestions.', error });
+        console.error('Error fetching suggestions:', error);
+        res.status(500).json({ error: 'Failed to fetch suggestions.' });
     }
 });
 
-module.exports = route;
+module.exports = router;
